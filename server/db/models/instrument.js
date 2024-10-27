@@ -1,7 +1,5 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Instrument extends Model {
     /**
@@ -11,17 +9,25 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // Your code here
+      this.belongsToMany(models.Musician, {
+        through: 'MusicianInstrument',
+        foreignKey: 'instrumentId',
+        otherKey: 'musicianId',
+      });
     }
-  };
-  Instrument.init({
-    type: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true
+  }
+  Instrument.init(
+    {
+      type: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+      },
+    },
+    {
+      sequelize,
+      modelName: 'Instrument',
     }
-  }, {
-    sequelize,
-    modelName: 'Instrument',
-  });
+  );
   return Instrument;
 };
